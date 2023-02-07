@@ -1,6 +1,6 @@
 {
-  "name": "cbi-cdk-lib",
-  "version": "0.1.0",
+  "name": "@dcheese/cbi-cdk-lib",
+  "version": "1.0.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
@@ -20,5 +20,8 @@
   "peerDependencies": {
     "aws-cdk-lib": "2.59.0",
     "constructs": "^10.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   }
 }

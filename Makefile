@@ -1,15 +1,8 @@
 
 
-.PHONY: help deploy destroy build clean node_modules
+.PHONY: help install build publish test clean
 
-stackName=cbi-cdk-eks
-configFile="dev.json"
-
-domain=sandbox
-repository=cdk
-namespace=cdk-solution
-package=cdk-eks
-version=0.0.0
+scope=ConstellationBrands
 
 help:
 	@echo ''
@@ -19,37 +12,24 @@ help:
 	awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 	@echo ''
 
-deploy: build ## Deploys the stack to the default account and region
-	cdk deploy --require-approval never -c stackName=${stackName} -c configFile=${configFile}
+login:
+	npm login --scope=$(scope) --auth-type=legacy --registry=https://npm.pkg.github.com
 
-destroy: ## Removes the default stack 
-	cdk destroy -c stackName=${stackName}
-
-install:
+install: ## Install dependencies
 	npm install
 
-build: install ## Run the CDK test apps 
+build: install ## Builds the package
 	npm run build
 
-unpublish:
-	- aws codeartifact delete-package-versions --domain $(domain) --repository $(repository) --format npm --package $(package) --namespace $(namespace) --versions ${version}
-
-publish: build
+publish: build ## Publish the package
 	npm publish
 
-docs: build
-	npx typedoc --plugin typedoc-plugin-markdown --theme markdown --out docs lib --excludeNotDocumented
-	
-test: install ## Builds the CDK app 
+test: install ## Run the test
 	npm test
 
 clean: ## Removes all build, test artifacts
-	rm -rf docs/*
-	rm -rf cdk.context.json \
 	rm -rf build \
 	rm -rf node_modules
 	find . -name '*.js' ! -name 'jest.config.js' -exec rm -fr {} + 
 	find . -name '*.d.ts' -exec rm -fr {} + 
-	find . -name '*.pyc' -exec rm -fr {} + 
-	find . -name '__pycache__' -exec rm -fr {} + 
 	find . -name '*~' -exec rm -f {} +
