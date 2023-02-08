@@ -5,18 +5,18 @@ import * as s3 from 'aws-cdk-lib/aws-s3'
 import * as ssm from 'aws-cdk-lib/aws-ssm'
 import { Construct } from "constructs";
 
-interface DataLakeBucketProps extends s3.BucketProps {
+interface BucketProps extends s3.BucketProps {
     // Prefix for naming the S3 Bucket resources
     ssmPrefix: string;
     // Description of the Buckets purpose/usage.
     description: string;
 }
 
-export class DataLakeBucket extends s3.Bucket {
+export class Bucket extends s3.Bucket {
     private _ssmArn: ssm.StringParameter;
     private _ssmName: ssm.StringParameter;
 
-    constructor(scope: Construct, id: string, props: DataLakeBucketProps) {
+    constructor(scope: Construct, id: string, props: BucketProps) {
         super(scope, id);
      
          // Add the bucket NAME and ARN to the parameter store

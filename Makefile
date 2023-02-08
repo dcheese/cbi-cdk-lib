@@ -1,19 +1,13 @@
 
 
-.PHONY: help install build publish test clean
+.PHONY: login help install build publish test clean
 
-scope=ConstellationBrands
+ORG=ConstellationBrands
 
-help:
-	@echo ''
-	@echo 'Available targets are:'
-	@echo ''
-	@grep -E '^[ a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
-	awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
-	@echo ''
+default: help
 
 login:
-	npm login --scope=$(scope) --auth-type=legacy --registry=https://npm.pkg.github.com
+	npm login --scope=$(ORG) --auth-type=legacy --registry=https://npm.pkg.github.com
 
 install: ## Install dependencies
 	npm install
@@ -21,7 +15,7 @@ install: ## Install dependencies
 build: install ## Builds the package
 	npm run build
 
-publish: build ## Publish the package
+publish: build ## Publish a major release
 	npm publish
 
 test: install ## Run the test
@@ -33,3 +27,11 @@ clean: ## Removes all build, test artifacts
 	find . -name '*.js' ! -name 'jest.config.js' -exec rm -fr {} + 
 	find . -name '*.d.ts' -exec rm -fr {} + 
 	find . -name '*~' -exec rm -f {} +
+help:
+	@echo ''
+	@echo 'Available targets are:'
+	@echo ''
+	@grep -E '^[ a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
+	awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+	@echo ''
+

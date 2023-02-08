@@ -17,3 +17,6 @@ $ npm login --scope=@OWNER --auth-type=legacy --registry=https://npm.pkg.github.
 > Username: USERNAME
 > Password: TOKEN
 ```
+```
+npm config set legacy-peer-deps true
+```
